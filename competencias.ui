@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Minhas Competências</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>571</width>
+      <height>311</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>ID</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Competência</string>
+     </property>
+    </column>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuPessoa">
+    <property name="title">
+     <string>Pessoa</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuCompet_ncias">
+    <property name="title">
+     <string>Competências</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuCursos">
+    <property name="title">
+     <string>Cursos</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuProvedores">
+    <property name="title">
+     <string>Provedores</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuConfigura_o">
+    <property name="title">
+     <string>Tipos de...</string>
+    </property>
+    <addaction name="actionde_Compet_ncias"/>
+    <addaction name="actionde_Cursos"/>
+   </widget>
+   <addaction name="menuPessoa"/>
+   <addaction name="menuCompet_ncias"/>
+   <addaction name="menuCursos"/>
+   <addaction name="menuProvedores"/>
+   <addaction name="menuConfigura_o"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionde_Compet_ncias">
+   <property name="text">
+    <string>... Competências</string>
+   </property>
+  </action>
+  <action name="actionde_Cursos">
+   <property name="text">
+    <string>... Cursos</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
