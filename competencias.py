@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMenu, QMenuBar, QAction, QMessageBox, QPushButton, QTableWidget
-from PyQt5 import QtWidgets
+from PyQt5 import QtCore, QtWidgets
 from PyQt5 import uic
 
 import MySQLdb as mdb
@@ -17,25 +17,109 @@ class UI(QMainWindow):
 		self.menubar.addAction(self.exit)
 		self.exit.triggered.connect(self.close)
 
+		self.actionNova.triggered.connect(self.pessoa_inserir)
+		self.actionExcluir.triggered.connect(self.pessoa_excluir)
+		
+		#self.tableWidget.itemChanged.connect(self.pessoa_editar)
+
 		self.tableWidget.setColumnWidth(0,0)
-		self.tableWidget.setColumnWidth(1,300)
+		self.tableWidget.setColumnWidth(1,100)
+		self.tableWidget.setColumnWidth(2,200)
+
+		self.carregar_tabela()
+
+		self.show()
+
+	def carregar_tabela(self):
+		mydb = self.DBConnection()
+
+		mysql = mydb.cursor()
+		SQL = 'SELECT id_pessoa, nome_pessoa, sobrenome_pessoa, CONCAT(nome_pessoa, " ", sobrenome_pessoa) AS nome_completo \
+						FROM Pessoa \
+						ORDER BY nome_completo'
+		mysql.execute(SQL)
+		query = mysql.fetchall()
+
+		self.tableWidget.setRowCount(0)
+		self.tableWidget.setRowCount(len(query))
+		item=0
+		for dado in query:
+			self.tableWidget.setItem(item, 0, QtWidgets.QTableWidgetItem(str(dado[0])))
+			self.tableWidget.setItem(item, 1, QtWidgets.QTableWidgetItem(dado[1]))
+			self.tableWidget.setItem(item, 2, QtWidgets.QTableWidgetItem(dado[2]))
+		#	print(item, dado[0], dado[1])
+			item+=1
+
+		mydb.close()
+
+	def pessoa_inserir(self):
 
 		mydb = self.DBConnection()
 
 		mysql = mydb.cursor()
-		SQL = 'SELECT id_competencia, nome_competencia FROM Competencia ORDER BY nome_competencia'
+		SQL = 'INSERT INTO Pessoa \
+						(nome_pessoa, sobrenome_pessoa) \
+						VALUES ("Marianna","Chaves")'
 		mysql.execute(SQL)
-		query = mysql.fetchall()
 
-		self.tableWidget.setRowCount(len(query))
-		for dado in query:
-			self.tableWidget.setItem(dado[0], 0, QtWidgets.QTableWidgetItem(dado[0]))
-			self.tableWidget.setItem(dado[0], 1, QtWidgets.QTableWidgetItem(dado[1]))
-			#print(dado[0], dado[1])
+		mydb.commit()
+		mydb.close()
+
+		self.carregar_tabela()
+
+		QMessageBox.about(self, 'Pessoa', f'Pessoa inserida...')
+
+
+	def pessoa_excluir(self):
+		index = self.tableWidget.currentIndex()
+		print(index.row())
+		pessoa_pk = self.tableWidget.item(index.row(), 0).text()
+
+		mydb = self.DBConnection()
+
+		mysql = mydb.cursor()
+		SQL = f'DELETE FROM Pessoa WHERE id_pessoa={pessoa_pk}'
+		try:
+			mysql.execute(SQL)
+			mydb.commit()
+	
+			QMessageBox.about(self, 'Pessoa', f'Pessoa excluída...')
+		except:
+			mydb.rollback()
+
+			QMessageBox.about(self, 'SQL Error', "Error!")
 
 		mydb.close()
 
-		self.show()
+		self.carregar_tabela()
+
+	def pessoa_editar(self):
+		index = self.tableWidget.currentIndex()
+		print('UPD= ',index.row())
+		pessoa_pk = self.tableWidget.item(index.row(), 0)
+		nome = self.tableWidget.item(index.row(), 1)
+		sobrenome = self.tableWidget.item(index.row(), 2)
+
+		mydb = self.DBConnection()
+
+		mysql = mydb.cursor()
+		SQL = f'UPDATE Pessoa \
+					SET nome_pessoa = "{nome}" , \
+						sobrenome_pessoa = "{sobrenome}" \
+					WHERE id_pessoa={pessoa_pk}'
+		try:
+			mysql.execute(SQL)
+			mydb.commit()
+	
+			QMessageBox.about(self, 'Pessoa', f'Pessoa atualizada {SQL}...')
+		except:
+			mydb.rollback()
+
+			QMessageBox.about(self, 'SQL Error', f"Error! {SQL}")
+
+		mydb.close()
+
+		self.carregar_tabela()
 
 	def menuSair(self):
 		#app.quit()
