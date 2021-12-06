@@ -84,6 +84,8 @@
      <string>Pessoa</string>
     </property>
     <addaction name="actionNova"/>
+    <addaction name="separator"/>
+    <addaction name="actionEditar"/>
     <addaction name="actionExcluir"/>
    </widget>
    <widget class="QMenu" name="menuCompet_ncias">
@@ -141,6 +143,11 @@
   <action name="actionExcluir">
    <property name="text">
     <string>Excluir</string>
+   </property>
+  </action>
+  <action name="actionEditar">
+   <property name="text">
+    <string>Editar</string>
    </property>
   </action>
  </widget>
